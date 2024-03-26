@@ -5,5 +5,6 @@ public class WallObject : BaseObject
         //Them effect
 
         Destroy(gameObject);
+        LevelManager.Instance.OnWallDestroyed(this);
     }
 }

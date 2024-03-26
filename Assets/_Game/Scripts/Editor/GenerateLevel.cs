@@ -11,11 +11,17 @@ public class GenerateLevel : EditorWindow
 
     static GenerateLevel window;
 
+    static string mapTemplatePath = "Assets/_Game/Prefabs/Gameplay/Levels/Level Template.prefab";
+    static string smallWallPrefabPath = "Assets/_Game/Prefabs/Gameplay/Object/Small Wall.prefab";
+
+    static GameObject mapTemplatePrefab;
+    static GameObject smallWallPrefab;
+
     private void OnEnable()
     {
         slotMatrixDeleted = null;
-        //mapPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/_Game/_Prefabs/Levels/Cancer/1.prefab", typeof(GameObject));
-
+        mapTemplatePrefab = (GameObject)AssetDatabase.LoadAssetAtPath(mapTemplatePath, typeof(GameObject));
+        smallWallPrefab = (GameObject)AssetDatabase.LoadAssetAtPath(smallWallPrefabPath, typeof(GameObject));
     }
 
     [MenuItem("The Army/Level/Generate Map")]
@@ -30,6 +36,16 @@ public class GenerateLevel : EditorWindow
     {
         DrawEditorField();
         DrawMapPreview();
+    }
+
+    void DrawEditorField()
+    {
+        GUILayout.BeginHorizontal();
+
+        col = EditorGUILayout.IntField("Width: ", col);
+        row = EditorGUILayout.IntField("Height: ", row);
+        sizeSlot = EditorGUILayout.IntField("Size view: ", sizeSlot);
+        GUILayout.EndHorizontal();
     }
 
     void DrawMapPreview()
@@ -75,19 +91,27 @@ public class GenerateLevel : EditorWindow
         GUILayout.BeginVertical();
         if (GUILayout.Button("Generate Map"))
         {
-            Debug.Log("Spawn Map");
+            GenerateMap();
         }
         GUILayout.EndVertical();
         GUILayout.EndArea();
     }
 
-    void DrawEditorField()
+    void GenerateMap()
     {
-        GUILayout.BeginHorizontal();
+        GameObject levelSpawn = PrefabUtility.InstantiatePrefab(mapTemplatePrefab) as GameObject;
+        Transform wallContainer = levelSpawn.transform.Find("Wall");
+        for(int i = 0; i < col; i++)
+        {
+            for(int j = 0; j < row; j++)
+            {
+                if (slotMatrixDeleted[i, j]) continue;
+                GameObject wallSpawn = PrefabUtility.InstantiatePrefab(smallWallPrefab, wallContainer) as GameObject;
+                wallSpawn.transform.position = new Vector3(i, j, 0f);
 
-        col = EditorGUILayout.IntField("Width: ", col);
-        row = EditorGUILayout.IntField("Height: ", row);
-        sizeSlot = EditorGUILayout.IntField("Size view: ", sizeSlot);
-        GUILayout.EndHorizontal();
+                LevelManager levelManager = levelSpawn.GetComponent<LevelManager>();
+                levelManager.cameraSize = col;
+            }
+        }
     }
 }

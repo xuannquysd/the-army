@@ -3,22 +3,26 @@ using UnityEngine;
 
 public abstract class BaseObject : MonoBehaviour
 {
-    [SerializeField] private float hp;
+    [SerializeField] private float rawHP, rawDefend;
     [SerializeField] private TMP_Text hpTxt;
 
-    protected float Hp { get => hp; set => hp = value; }
+    protected float currentHP;
+
+    public float RawHp { get => rawHP; set => rawHP = value; }
+    public TMP_Text HpTxt { get => hpTxt; set => hpTxt = value; }
 
     protected void Start()
     {
-        hpTxt.text = hp.ToString();
+        currentHP = rawHP;
+        HpTxt.text = currentHP.ToString();
     }
 
-    public void GetDamage(int value)
+    public void GetDamage(float value)
     {
-        hp -= value;
-        hpTxt.text = hp.ToString();
+        currentHP -= value - rawDefend;
+        HpTxt.text = Mathf.CeilToInt(currentHP).ToString();
 
-        if (hp > 0) return;
+        if (currentHP > 0) return;
         Death();
     }
 
