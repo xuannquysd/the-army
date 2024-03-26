@@ -5,10 +5,8 @@ public class ObserverKey
 
 public class GameplayConstance
 {
-    public static StatisticUpgradeBattle DEFAULT_UPGRADE_BATTLE = new()
+    public static StatisticNextUpgrade DEFAULT_UPGRADE_BATTLE = new()
     {
-        Type = AllyType.WARRIOR,
-
         QuantityUnit = 1,
         PriceBuyUnit = 3,
 
@@ -20,5 +18,11 @@ public class GameplayConstance
 
         ATKSpeed = 1,
         PriceUpgradeATKSpeed = 3
+    };
+    public static StatisticAlly DEFAULT_STATISTIC_ALLY = new()
+    {
+        HP = 1,
+        Powers = 1,
+        ATKSpeed = 1
     };
 }

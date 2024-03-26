@@ -26,7 +26,6 @@ public class InfoArmyUI : MonoBehaviour
 
     void UpdateUIUpgradeBtn(object data)
     {
-        StatisticUpgradeBattle staticBattle = (StatisticUpgradeBattle)data;
-        if (Type != staticBattle.Type) return;
+        
     }
 }

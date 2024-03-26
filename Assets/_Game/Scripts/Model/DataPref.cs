@@ -14,13 +14,13 @@ public class InGameData
 
     int currentMoney;
     List<AllyObject> allyObjects;
-    List<StatisticUpgradeBattle> staticBattles;
+    Dictionary<AllyType, StatisticBattle> staticBattles;
 
     public List<AllyObject> AllyObjects { get => allyObjects; set => allyObjects = value; }
-    public List<StatisticUpgradeBattle> StaticBattles { get => staticBattles; set => staticBattles = value; }
     public int CurrentMoney { get => currentMoney; set => currentMoney = value; }
     public int CurrentStage { get => currentStage; set => currentStage = value; }
     public int CurrentLevel { get => currentLevel; set => currentLevel = value; }
+    public Dictionary<AllyType, StatisticBattle> StaticBattles { get => staticBattles; set => staticBattles = value; }
 
     public InGameData()
     {
@@ -31,7 +31,10 @@ public class InGameData
         AllyObjects = new();
         StaticBattles = new()
         {
-            GameplayConstance.DEFAULT_UPGRADE_BATTLE
+            {
+                AllyType.WARRIOR,
+                new StatisticBattle(GameplayConstance.DEFAULT_UPGRADE_BATTLE, GameplayConstance.DEFAULT_STATISTIC_ALLY)
+            }
         };
     }
 }
