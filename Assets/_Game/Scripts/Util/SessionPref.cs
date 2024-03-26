@@ -31,4 +31,9 @@ public static class SessionPref
         GetInGameData().AllyObjects.Clear();
         SetInGameData(new());
     }
+    
+    public static int GetCurrentInGameMoney()
+    {
+        return _gameData.CurrentMoney;
+    }
 }
