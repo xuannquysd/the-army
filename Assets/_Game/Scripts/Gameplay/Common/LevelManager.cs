@@ -111,6 +111,12 @@ public class LevelManager : MonoBehaviour
         if (IsWin()) Win();
     }
 
+    void OnUpgradeStatisticAlly(object data)
+    {
+        AllyType type = (AllyType) data;
+        foreach (var a in allyObjects) if (a.Type == type) a.SetStatisticBuff();
+    }
+
     bool IsWin()
     {
         return wallObjects.Count == 0 && enemyObjects.Count == 0;

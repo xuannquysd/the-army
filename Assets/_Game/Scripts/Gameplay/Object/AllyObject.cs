@@ -4,6 +4,8 @@ public class AllyObject : CharacterObject
 {
     [SerializeField] AllyType type;
 
+    public AllyType Type { get => type; set => type = value; }
+
     private void Start()
     {
         base.Start();
@@ -12,8 +14,8 @@ public class AllyObject : CharacterObject
 
     public void SetStatisticBuff()
     {
-        StatisticAlly statisticAlly = SessionPref.GetStatisticAlly(type);
-
+        StatisticAlly statisticAlly = SessionPref.GetStatisticAlly(Type);
+        damage = statisticAlly.Powers;
     }
 
     public override void OnKillTarget()
