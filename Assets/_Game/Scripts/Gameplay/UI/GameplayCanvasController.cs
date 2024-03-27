@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using static SOPrefab;
@@ -14,16 +15,38 @@ public class GameplayCanvasController : MonoBehaviour
     [SerializeField] Transform containerUpgradeList;
     [SerializeField] InfoArmyUI infoUpgradePrefab;
 
+    List<InfoArmyUI> infoUpgradeList;
     SOPrefab SOPrefab;
     SOStageData SOStageData;
 
+    public static GameplayCanvasController Instance;
+
     private void Start()
     {
+        infoUpgradeList = new();
+
         SOStageData = SOContainer.Instance.GetSO<SOStageData>();
         SOPrefab = SOContainer.Instance.GetSO<SOPrefab>();
 
         InitDefaultStageData();
         InitUIUpgradeList();
+
+        SetBattleMoneyText();
+        SetLevelText();
+
+        InitObserver();
+    }
+
+    void SetBattleMoneyText()
+    {
+        int currentBattleMoney = SessionPref.GetCurrentBattleMoney();
+        battleMoneyTxt.text = "$" + currentBattleMoney;
+    }
+
+    public void SetLevelText()
+    {
+        int currentLevel = SessionPref.GetCurrentLevel() + 1;
+        levelTxt.text = "Level " + currentLevel;
     }
 
     void InitDefaultStageData()
@@ -56,6 +79,39 @@ public class GameplayCanvasController : MonoBehaviour
             ui.Type = d.Key;
             ui.prefab = allyPrefabContainer.Prefab;
             ui.nameArmy = allyPrefabContainer.Name;
+
+            infoUpgradeList.Add(ui);
         }
+    }
+
+    void UpdateFixedColor(Color color)
+    {
+        foreach(var ui in infoUpgradeList) ui.UpdateFixedColor(color);
+    }
+
+    void OnChangeBattleMoney(object data)
+    {
+        SetBattleMoneyText();
+        foreach (var i in infoUpgradeList) i.UpdateColorPriceUI();
+    }
+
+    public void OnLose()
+    {
+        UpdateFixedColor(Color.red);
+    }
+
+    void InitObserver()
+    {
+        Observer.AddEvent(ObserverKey.ON_CHANGE_BATTLE_MONEY, OnChangeBattleMoney);
+    }
+
+    void RemoveObserser()
+    {
+        Observer.RemoveEvent(ObserverKey.ON_CHANGE_BATTLE_MONEY);
+    }
+
+    private void OnDestroy()
+    {
+        RemoveObserser();
     }
 }

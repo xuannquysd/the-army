@@ -26,8 +26,7 @@ public class InGameData
     {
         CurrentStage = 0;
         CurrentLevel = 0;
-
-        CurrentMoney = 0;
+        CurrentMoney = 3;
         AllyObjects = new();
         StaticBattles = new()
         {

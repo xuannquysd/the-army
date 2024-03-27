@@ -86,13 +86,10 @@ public abstract class CharacterObject : BaseObject
         if(GameManager.Instance.GameState != GameState.PLAYING) return;
 
         if (currentTarget == null) return;
-        currentTarget.GetDamage(damage);
-
-        if (currentTarget.RawHp > 0) return;
-        OnKillTarget();
+        currentTarget.GetDamage(damage, this);
     }
 
-    protected virtual void OnKillTarget()
+    public virtual void OnKillTarget()
     {
         FindNearTarget();
     }

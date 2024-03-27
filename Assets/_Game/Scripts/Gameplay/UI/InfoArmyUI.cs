@@ -23,6 +23,7 @@ public class InfoArmyUI : MonoBehaviour
     {
         title.text = nameArmy;
         UpdateUIUpgradeBtn();
+        UpdateColorPriceUI();
     }
 
     void OnClickButton(Action callBack)
@@ -37,7 +38,7 @@ public class InfoArmyUI : MonoBehaviour
         int currentMoney = SessionPref.GetCurrentBattleMoney();
         int currentPrice = statisticNextUpgrade.PriceBuyUnit;
 
-        //if (currentMoney < currentPrice) return;
+        if (currentMoney < currentPrice) return;
 
         AllyObject army = Instantiate(prefab, GameplayConstance.SPAWN_POSITION, Quaternion.identity);
         LevelManager.Instance.OnChangeQuantityAlly(army);
@@ -129,5 +130,21 @@ public class InfoArmyUI : MonoBehaviour
         int price = statisticNextUpgrade.PriceUpgradeATKSpeed;
 
         upgradeAtkSpeedBtn.UpdateUI(statistic, price);
+    }
+
+    public void UpdateColorPriceUI()
+    {
+        buyUnitBtn.UpdateColor();
+        upgradePowersBtn.UpdateColor();
+        upgradeHealthBtn.UpdateColor();
+        upgradeAtkSpeedBtn.UpdateColor();
+    }
+
+    public void UpdateFixedColor(Color color)
+    {
+        buyUnitBtn.UpdateFixedColor(color);
+        upgradePowersBtn.UpdateFixedColor(color);
+        upgradeHealthBtn.UpdateFixedColor(color);
+        upgradeAtkSpeedBtn.UpdateFixedColor(color);
     }
 }

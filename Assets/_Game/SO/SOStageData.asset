@@ -14,3 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StageDatas:
   - DefaultAllyType: 0000000001000000
+    levelDatas:
+    - isRandom: 0
+      Prefab: {fileID: 3721140031451115937, guid: 0ae1ab0e51aa62d42b1525a34c22df2e, type: 3}
+    - isRandom: 0
+      Prefab: {fileID: 3721140031451115937, guid: 5eac886c840c78443907172ecd785cb8, type: 3}
+  levelRandomList:
+  - {fileID: 3721140031451115937, guid: 0ae1ab0e51aa62d42b1525a34c22df2e, type: 3}

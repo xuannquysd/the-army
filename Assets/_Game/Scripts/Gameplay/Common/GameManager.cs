@@ -11,5 +11,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        SessionPref.ClearSaveData();
     }
 }

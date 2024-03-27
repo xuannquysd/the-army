@@ -154,6 +154,7 @@ public class LevelManager : MonoBehaviour
 
         GameManager.Instance.GameState = GameState.PAUSE;
         SessionPref.ClearSaveData();
+        GameplayCanvasController.Instance.OnLose();
     }
 
     IEnumerator ProgressGameplay()

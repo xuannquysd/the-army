@@ -41,11 +41,13 @@ public static class SessionPref
     public static void AddBattleMoney(int value)
     {
         GetInGameData().CurrentMoney += value;
+        Observer.Notify(ObserverKey.ON_CHANGE_BATTLE_MONEY);
     }
 
     public static void SetBattleMoney(int value)
     {
         GetInGameData().CurrentMoney = value;
+        Observer.Notify(ObserverKey.ON_CHANGE_BATTLE_MONEY);
     }
 
     public static StatisticBattle GetCurrentStatisticBattle(AllyType type)
@@ -59,10 +61,28 @@ public static class SessionPref
         return GetInGameData().StaticBattles;
     }
 
+    public static StatisticNextUpgrade GetStatisticNextUpgrade(AllyType type)
+    {
+        return GetInGameData().StaticBattles[type].statisticNextUpgrade;
+    }
+
     public static void SetStatisticNextUpgrade(AllyType type, StatisticNextUpgrade statisticNextUpgrade)
     {
         StatisticBattle statisticBattle = GetInGameData().StaticBattles[type];
         statisticBattle.statisticNextUpgrade = statisticNextUpgrade;
+
+        GetInGameData().StaticBattles[type] = statisticBattle;
+    }
+
+    public static StatisticAlly GetStatisticAlly(AllyType type)
+    {
+        return GetInGameData().StaticBattles[type].statisticAlly;
+    }
+
+    public static void SetStatisticAlly(AllyType type, StatisticAlly statisticAlly)
+    {
+        StatisticBattle statisticBattle = GetInGameData().StaticBattles[type];
+        statisticBattle.statisticAlly = statisticAlly;
 
         GetInGameData().StaticBattles[type] = statisticBattle;
     }
@@ -72,13 +92,29 @@ public static class SessionPref
         GetInGameData().StaticBattles.Add(type, statisticBattle);
     }
 
-    public static StatisticNextUpgrade GetStatisticNextUpgrade(AllyType type)
-    {
-        return GetInGameData().StaticBattles[type].statisticNextUpgrade;
-    }
-
     public static int GetCurrentStage()
     {
         return GetInGameData().CurrentStage;
     }
+
+    public static void SetCurrentStage(int stage)
+    {
+        GetInGameData().CurrentStage = stage;
+    }
+
+    public static int GetCurrentLevel()
+    {
+        return GetInGameData().CurrentLevel;
+    }
+
+    public static void SetCurrentLevel(int level)
+    {
+        GetInGameData().CurrentLevel = level;
+    }
+
+    public static void NextLevel()
+    {
+        GetInGameData().CurrentLevel++;
+    }
+
 }

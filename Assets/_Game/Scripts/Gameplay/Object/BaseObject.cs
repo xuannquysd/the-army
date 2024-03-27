@@ -6,23 +6,24 @@ public abstract class BaseObject : MonoBehaviour
     [SerializeField] private float rawHP, rawDefend;
     [SerializeField] private TMP_Text hpTxt;
 
-    protected float currentHP;
-
-    public float RawHp { get => rawHP; set => rawHP = value; }
+    private float currentHP;
     public TMP_Text HpTxt { get => hpTxt; set => hpTxt = value; }
+    public float CurrentHP { get => currentHP; set => currentHP = value; }
+    public float RawHP { get => rawHP; set => rawHP = value; }
 
     protected void Start()
     {
-        currentHP = rawHP;
-        HpTxt.text = currentHP.ToString();
+        CurrentHP = RawHP;
+        HpTxt.text = CurrentHP.ToString();
     }
 
-    public virtual void GetDamage(float value)
+    public virtual void GetDamage(float value, CharacterObject objectSendDamage)
     {
-        currentHP -= value - rawDefend;
-        HpTxt.text = Mathf.CeilToInt(currentHP).ToString();
+        CurrentHP -= (value - rawDefend);
+        HpTxt.text = Mathf.CeilToInt(CurrentHP).ToString();
 
-        if (currentHP > 0) return;
+        if (CurrentHP > 0) return;
+        objectSendDamage.OnKillTarget();
         Death();
     }
 

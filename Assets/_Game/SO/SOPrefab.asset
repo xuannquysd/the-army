@@ -19,23 +19,23 @@ MonoBehaviour:
     Prefab: {fileID: 1864230190255339058, guid: 6888e5606ecd68344b434925fe7f0198, type: 3}
     StatisticFirstUpgrade:
       QuantityUnit: 1
-      PriceBuyUnit: 5
-      Powers: 1
-      PriceUpgradePowers: 4
-      HP: 1
-      PriceUpgradeHP: 3
-      ATKSpeed: 1
-      PriceUpgradeATKSpeed: 2
+      PriceBuyUnit: 3
+      Powers: 1.1
+      PriceUpgradePowers: 5
+      HP: 1.1
+      PriceUpgradeHP: 5
+      ATKSpeed: 1.1
+      PriceUpgradeATKSpeed: 5
   - Type: 1
     Name: Big Warrior
     Icon: {fileID: 0}
     Prefab: {fileID: 1864230190255339058, guid: 8f23f224235d79641b9df767a25c37f2, type: 3}
     StatisticFirstUpgrade:
       QuantityUnit: 1
-      PriceBuyUnit: 1
-      Powers: 2
-      PriceUpgradePowers: 2
-      HP: 3
-      PriceUpgradeHP: 3
-      ATKSpeed: 4
-      PriceUpgradeATKSpeed: 4
+      PriceBuyUnit: 5
+      Powers: 1.1
+      PriceUpgradePowers: 7
+      HP: 1.1
+      PriceUpgradeHP: 7
+      ATKSpeed: 1.1
+      PriceUpgradeATKSpeed: 7
