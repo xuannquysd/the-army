@@ -31,10 +31,14 @@ public class InGameData
         AllyObjects = new();
         StaticBattles = new()
         {
-            {
+            /*{
                 AllyType.WARRIOR,
                 new StatisticBattle(GameplayConstance.DEFAULT_UPGRADE_BATTLE, GameplayConstance.DEFAULT_STATISTIC_ALLY)
-            }
+            },
+            {
+                AllyType.BIG_WARRIOR,
+                new StatisticBattle(GameplayConstance.DEFAULT_UPGRADE_BATTLE, GameplayConstance.DEFAULT_STATISTIC_ALLY)
+            },*/
         };
     }
 }

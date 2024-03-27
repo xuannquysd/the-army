@@ -1,7 +1,5 @@
 using DG.Tweening;
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public abstract class CharacterObject : BaseObject
@@ -18,13 +16,27 @@ public abstract class CharacterObject : BaseObject
     protected bool isCombat;
     protected Vector2 dirMove;
 
+    #region Statistic React
+    protected float damage;
+    protected float speedMove, speedAttack;
+    protected float radiusAttack;
+    #endregion
+
     protected Rigidbody2D Rigid { get => rigid; set => rigid = value; }
 
     protected void Start()
     {
         base.Start();
-
+        InitStatisticReact();
         transform.DOScale(1f, 0.5f).From(0f).SetEase(Ease.OutBack);
+    }
+
+    void InitStatisticReact()
+    {
+        damage = rawDamage;
+        speedMove = rawSpeedMove;
+        speedAttack = rawSpeedAttack;
+        radiusAttack = rawRadiusAttack;
     }
 
     public void InitTargetObject(List<Transform> allTargetObject)
@@ -65,13 +77,16 @@ public abstract class CharacterObject : BaseObject
 
     protected override void Death()
     {
+        if (GameManager.Instance.GameState != GameState.PLAYING) return;
         Destroy(gameObject);
     }
 
     protected virtual void Attack()
     {
+        if(GameManager.Instance.GameState != GameState.PLAYING) return;
+
         if (currentTarget == null) return;
-        currentTarget.GetDamage(rawDamage);
+        currentTarget.GetDamage(damage);
 
         if (currentTarget.RawHp > 0) return;
         OnKillTarget();
@@ -94,9 +109,9 @@ public abstract class CharacterObject : BaseObject
     void MoveToTarget()
     {
         float distance = Vector2.Distance(currentTarget.transform.position, transform.position);
-        if (distance > rawRadiusAttack)
+        if (distance > radiusAttack)
         {
-            rigid.velocity = rawSpeedMove * Time.deltaTime * dirMove.normalized;
+            rigid.velocity = speedMove * Time.deltaTime * dirMove.normalized;
             animator.SetBool("Attacking", false);
         }
         else
@@ -112,6 +127,11 @@ public abstract class CharacterObject : BaseObject
         float angle = Mathf.Atan2(dirMove.y, dirMove.x) * Mathf.Rad2Deg - 90f;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * speedRotate);
+    }
+
+    public void StopAttack()
+    {
+        animator.SetBool("Attacking", false);
     }
 
 #if UNITY_EDITOR

@@ -1835,7 +1835,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1447442233053158966, guid: 602f953761c061748926da69e6f6e5a2, type: 3}
       propertyPath: m_Name
-      value: Level 0
+      value: Level 1
       objectReference: {fileID: 0}
     - target: {fileID: 1895555285087736395, guid: 602f953761c061748926da69e6f6e5a2, type: 3}
       propertyPath: cameraSize
@@ -1844,7 +1844,7 @@ PrefabInstance:
     - target: {fileID: 1895555285087736395, guid: 602f953761c061748926da69e6f6e5a2, type: 3}
       propertyPath: testPrefab
       value: 
-      objectReference: {fileID: 3721140031451115937, guid: 5eac886c840c78443907172ecd785cb8, type: 3}
+      objectReference: {fileID: 3721140031451115937, guid: 0ae1ab0e51aa62d42b1525a34c22df2e, type: 3}
     - target: {fileID: 1895555285087736395, guid: 602f953761c061748926da69e6f6e5a2, type: 3}
       propertyPath: wallObjects.Array.size
       value: 84

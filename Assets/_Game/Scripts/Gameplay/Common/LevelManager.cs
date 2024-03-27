@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class LevelManager : MonoBehaviour
     public List<EnemyObject> enemyObjects;
 
     List<AllyObject> allyObjects;
+    Coroutine progressGameplay;
 
     public static LevelManager Instance { get; private set; }
 
@@ -21,7 +23,7 @@ public class LevelManager : MonoBehaviour
 
         Transform wallContainer = transform.GetChild(0);
         int totalWall = wallContainer.childCount;
-        for(int i = 0; i < totalWall; i++) wallObjects.Add(wallContainer.GetChild(i).GetComponent<WallObject>());
+        for (int i = 0; i < totalWall; i++) wallObjects.Add(wallContainer.GetChild(i).GetComponent<WallObject>());
 
         Transform enemyContainer = transform.GetChild(1);
         int totalEnemy = enemyContainer.childCount;
@@ -37,13 +39,16 @@ public class LevelManager : MonoBehaviour
     {
         Camera.main.orthographicSize = cameraSize * 2f;
         SpawnSaveAlly();
+        GameManager.Instance.GameState = GameState.PLAYING;
+
+        progressGameplay = StartCoroutine(ProgressGameplay());
     }
 
-    void SpawnSaveAlly() 
+    void SpawnSaveAlly()
     {
         allyObjects = SessionPref.GetSaveAlly();
 
-        foreach(var a in allyObjects) a.InitTargetObject(GetAllTransformLevelObject());
+        foreach (var a in allyObjects) a.InitTargetObject(GetAllTransformLevelObject());
 
         InitEnemyOnChangeAlly();
     }
@@ -55,14 +60,14 @@ public class LevelManager : MonoBehaviour
         baseObjects.AddRange(enemyObjects);
 
         List<Transform> allTransform = new();
-        foreach (var t in baseObjects) if(t != null) allTransform.Add(t.transform);
+        foreach (var t in baseObjects) if (t != null) allTransform.Add(t.transform);
         return allTransform;
     }
 
     private List<Transform> GetAllAllyTranform()
     {
         List<Transform> allTransform = new();
-        foreach (var t in allyObjects) if(t != null) allTransform.Add(t.transform);
+        foreach (var t in allyObjects) if (t != null) allTransform.Add(t.transform);
         return allTransform;
     }
 
@@ -82,7 +87,7 @@ public class LevelManager : MonoBehaviour
 
     void InitEnemyOnChangeAlly()
     {
-        foreach (var enemy in enemyObjects) if(enemy != null) enemy.InitTargetObject(GetAllAllyTranform());
+        foreach (var enemy in enemyObjects) if (enemy != null) enemy.InitTargetObject(GetAllAllyTranform());
     }
 
     public void OnAllyDeath(AllyObject allyDeath)
@@ -118,14 +123,23 @@ public class LevelManager : MonoBehaviour
 
     void Win()
     {
+        StopCoroutine(progressGameplay);
+
+        GameManager.Instance.GameState = GameState.PAUSE;
         SessionPref.SaveAlly(allyObjects);
 
+        Invoke(nameof(SpawnNextLevel), 2f);
+    }
+
+    void SpawnNextLevel()
+    {
         int totalSaveAlly = allyObjects.Count;
 
         float pointX = totalSaveAlly / 2f * -1f;
         foreach (var a in allyObjects)
         {
             Vector3 position = new(pointX, 2f, 0f);
+            a.StopAttack();
             a.transform.SetPositionAndRotation(position, Quaternion.identity);
             pointX++;
         }
@@ -136,12 +150,19 @@ public class LevelManager : MonoBehaviour
 
     void Lose()
     {
+        StopCoroutine(progressGameplay);
+
+        GameManager.Instance.GameState = GameState.PAUSE;
         SessionPref.ClearSaveData();
     }
 
-    private void Update()
+    IEnumerator ProgressGameplay()
     {
-        if(allyObjects != null) foreach (var a in allyObjects) if(a != null) a.Progress();
-        if(enemyObjects != null) foreach (var e in enemyObjects) if(e != null) e.Progress();
+        while (true)
+        {
+            if (allyObjects != null) foreach (var a in allyObjects) if (a != null) a.Progress();
+            if (enemyObjects != null) foreach (var e in enemyObjects) if (e != null) e.Progress();
+            yield return null;
+        }
     }
 }

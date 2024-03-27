@@ -17,7 +17,7 @@ public abstract class BaseObject : MonoBehaviour
         HpTxt.text = currentHP.ToString();
     }
 
-    public void GetDamage(float value)
+    public virtual void GetDamage(float value)
     {
         currentHP -= value - rawDefend;
         HpTxt.text = Mathf.CeilToInt(currentHP).ToString();

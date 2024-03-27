@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    GameState _gameState = GameState.PAUSE;
 
-    // Update is called once per frame
-    void Update()
+    public static GameManager Instance;
+
+    public GameState GameState { get => _gameState; set => _gameState = value; }
+
+    private void Awake()
     {
-        
+        Instance = this;
     }
 }

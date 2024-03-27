@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9528302, g: 0.6301498, b: 0.20225172, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 2607936691853857988}
   - component: {fileID: 6844876930996296542}
   m_Layer: 0
-  m_Name: Warrior
+  m_Name: Big Warrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,17 +134,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4ef40923d5b9af4792b0e6ed016fc05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rawHP: 3
+  rawHP: 5
   rawDefend: 0
   hpTxt: {fileID: 7061464510985892618}
   rawDamage: 1
-  rawSpeedMove: 300
+  rawSpeedMove: 200
   speedRotate: 5
   rawSpeedAttack: 1
   rawRadiusAttack: 1.25
   rigid: {fileID: 2607936691853857988}
   animator: {fileID: 3869329873247424761}
-  type: 0
+  type: 1
 --- !u!95 &3869329873247424761
 Animator:
   serializedVersion: 5
@@ -336,8 +336,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

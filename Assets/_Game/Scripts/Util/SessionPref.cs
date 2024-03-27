@@ -1,3 +1,5 @@
+using MyBox;
+using System;
 using System.Collections.Generic;
 
 public static class SessionPref
@@ -28,12 +30,55 @@ public static class SessionPref
 
     public static void ClearSaveData()
     {
-        GetInGameData().AllyObjects.Clear();
         SetInGameData(new());
     }
-    
-    public static int GetCurrentInGameMoney()
+
+    public static int GetCurrentBattleMoney()
     {
-        return _gameData.CurrentMoney;
+        return GetInGameData().CurrentMoney;
+    }
+
+    public static void AddBattleMoney(int value)
+    {
+        GetInGameData().CurrentMoney += value;
+    }
+
+    public static void SetBattleMoney(int value)
+    {
+        GetInGameData().CurrentMoney = value;
+    }
+
+    public static StatisticBattle GetCurrentStatisticBattle(AllyType type)
+    {
+        var dictionary = GetInGameData().StaticBattles;
+        return dictionary.GetOrAdd(type, new StatisticBattle());
+    }
+
+    public static Dictionary<AllyType, StatisticBattle> GetAllCurrentStatisticBattle()
+    {
+        return GetInGameData().StaticBattles;
+    }
+
+    public static void SetStatisticNextUpgrade(AllyType type, StatisticNextUpgrade statisticNextUpgrade)
+    {
+        StatisticBattle statisticBattle = GetInGameData().StaticBattles[type];
+        statisticBattle.statisticNextUpgrade = statisticNextUpgrade;
+
+        GetInGameData().StaticBattles[type] = statisticBattle;
+    }
+
+    public static void AddStatisticBattle(AllyType type, StatisticBattle statisticBattle)
+    {
+        GetInGameData().StaticBattles.Add(type, statisticBattle);
+    }
+
+    public static StatisticNextUpgrade GetStatisticNextUpgrade(AllyType type)
+    {
+        return GetInGameData().StaticBattles[type].statisticNextUpgrade;
+    }
+
+    public static int GetCurrentStage()
+    {
+        return GetInGameData().CurrentStage;
     }
 }
