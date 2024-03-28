@@ -16,6 +16,11 @@ public class AllyObject : CharacterObject
     {
         StatisticAlly statisticAlly = SessionPref.GetStatisticAlly(Type);
         damage = statisticAlly.Powers;
+        speedAttack = statisticAlly.ATKSpeed;
+
+        float diffHP = statisticAlly.HP - RawHPReact;
+        RawHPReact = statisticAlly.HP;
+        CurrentHP += diffHP;
     }
 
     public override void OnKillTarget()

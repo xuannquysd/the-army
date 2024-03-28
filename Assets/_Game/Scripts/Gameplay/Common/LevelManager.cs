@@ -134,6 +134,11 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.GameState = GameState.PAUSE;
         SessionPref.SaveAlly(allyObjects);
 
+        foreach (var a in allyObjects)
+        {
+            a.StopAttack();
+        }
+
         Invoke(nameof(SpawnNextLevel), 2f);
     }
 
@@ -145,7 +150,6 @@ public class LevelManager : MonoBehaviour
         foreach (var a in allyObjects)
         {
             Vector3 position = new(pointX, 2f, 0f);
-            a.StopAttack();
             a.transform.SetPositionAndRotation(position, Quaternion.identity);
             pointX++;
         }
@@ -171,5 +175,10 @@ public class LevelManager : MonoBehaviour
             if (enemyObjects != null) foreach (var e in enemyObjects) if (e != null) e.Progress();
             yield return null;
         }
+    }
+
+    public void UpgradeStaticsArmy(AllyType allyType)
+    {
+        foreach (var a in allyObjects) if(a.Type == allyType) a.SetStatisticBuff();
     }
 }

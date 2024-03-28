@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class ObserverKey
 {
-    public static string ON_CHANGE_STATISTIC_BATTLE = "On change statistic battle";
     public static string ON_CHANGE_BATTLE_MONEY = "On change battle money";
+    public static string ON_UPGRADE_POWERS = "On upgrade powers";
+    public static string ON_UPGRADE_HEALTH = "On upgrade health";
+    public static string ON_UPGRADE_ATK_SPEED = "On upgrade atk speed";
 }
 
 public class GameplayConstance

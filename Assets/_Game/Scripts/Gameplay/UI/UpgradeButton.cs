@@ -20,7 +20,8 @@ public class UpgradeButton : MonoBehaviour
     {
         _price = price;
 
-        statisticText.text = statistic.ToString();
+        float valueDisplay = Mathf.Round(statistic * 10f) / 10f;
+        statisticText.text = valueDisplay.ToString();
         priceText.text = "$" + price;
     }
 

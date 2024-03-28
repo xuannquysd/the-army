@@ -394,7 +394,7 @@ MonoBehaviour:
   hpTxt: {fileID: 8809829841465406424}
   rawDamage: 1
   rawSpeedMove: 200
-  speedRotate: 5
+  rawSpeedRotate: 5
   rawSpeedAttack: 1
   rawRadiusAttack: 1.25
   rigid: {fileID: 2874467840701769695}

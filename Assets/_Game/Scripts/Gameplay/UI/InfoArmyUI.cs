@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
+using static SOPrefab;
 
 public class InfoArmyUI : MonoBehaviour
 {
     [SerializeField] TMP_Text title;
     [SerializeField] UpgradeButton buyUnitBtn, upgradePowersBtn, upgradeHealthBtn, upgradeAtkSpeedBtn;
-    
+
     [HideInInspector] public AllyType Type;
     [HideInInspector] public AllyObject prefab;
     [HideInInspector] public string nameArmy;
+    [HideInInspector] public StatisticDefault[] statisticAlly;
+    [HideInInspector] public List<StatisticDefault> statisticDefaults;
 
     private void Awake()
     {
@@ -41,6 +46,9 @@ public class InfoArmyUI : MonoBehaviour
         if (currentMoney < currentPrice) return;
 
         AllyObject army = Instantiate(prefab, GameplayConstance.SPAWN_POSITION, Quaternion.identity);
+        SetStasticAlly(army);
+        army.SetStatisticBuff();
+
         LevelManager.Instance.OnChangeQuantityAlly(army);
 
         statisticNextUpgrade.QuantityUnit++;
@@ -54,6 +62,28 @@ public class InfoArmyUI : MonoBehaviour
         SessionPref.AddBattleMoney(-currentPrice);
     }
 
+    void SetStasticAlly(AllyObject allyObject)
+    {
+        allyObject.RawDamage = GetValueStat(StatisticType.Damage);
+        allyObject.RawHP = GetValueStat(StatisticType.HP);
+        allyObject.RawRadiusAttack = GetValueStat(StatisticType.Radius_Attack);
+        allyObject.RawSpeedAttack = GetValueStat(StatisticType.ATK_Speed);
+        allyObject.RawSpeedMove = GetValueStat(StatisticType.Speed_Move);
+        allyObject.RawSpeedRotate = GetValueStat(StatisticType.Speed_Rotate);
+        allyObject.RawDefend = GetValueStat(StatisticType.Defend);
+    }
+
+    float GetValueStat(StatisticType type)
+    {
+        StatisticDefault statistic = statisticAlly.Where(s => s.Type == type).FirstOrDefault();
+        if (statistic == null)
+        {
+            StatisticDefault statisticDefault = statisticDefaults.Where(s => s.Type == type).FirstOrDefault();
+            return statisticDefault.Value;
+        }
+        else return statistic.Value;
+    }
+
     void OnClickUpgradePowers()
     {
         StatisticNextUpgrade statisticNextUpgrade = SessionPref.GetStatisticNextUpgrade(Type);
@@ -61,7 +91,24 @@ public class InfoArmyUI : MonoBehaviour
         int currentPrice = statisticNextUpgrade.PriceUpgradePowers;
 
         if (currentMoney < currentPrice) return;
+        StatisticAlly statisticAlly = SessionPref.GetStatisticAlly(Type);
 
+        float currentPowers = statisticNextUpgrade.Powers;
+        statisticAlly.Powers = currentPowers;
+
+        int levelPower = statisticNextUpgrade.levelPowers;
+        float nextPower = currentPowers + currentPowers / 100f * 50f;
+        int nextPrice = currentPrice + Mathf.RoundToInt(currentPrice / 100f * 50f);
+        levelPower++;
+
+        statisticNextUpgrade.PriceUpgradePowers = nextPrice;
+        statisticNextUpgrade.Powers = nextPower;
+        statisticNextUpgrade.levelPowers = levelPower;
+
+        SessionPref.SetStatisticAlly(Type, statisticAlly);
+        SessionPref.SetStatisticNextUpgrade(Type, statisticNextUpgrade);
+
+        LevelManager.Instance.UpgradeStaticsArmy(Type);
         UpdateUIUpgradePoweresBtn(statisticNextUpgrade);
         SessionPref.AddBattleMoney(-currentPrice);
     }
@@ -73,7 +120,24 @@ public class InfoArmyUI : MonoBehaviour
         int currentPrice = statisticNextUpgrade.PriceUpgradeHP;
 
         if (currentMoney < currentPrice) return;
+        StatisticAlly statisticAlly = SessionPref.GetStatisticAlly(Type);
 
+        float currentHealth = statisticNextUpgrade.HP;
+        statisticAlly.HP = currentHealth;
+
+        int levelHealth = statisticNextUpgrade.levelHP;
+        float nextHealth = currentHealth + currentHealth / 100f * 50f;
+        int nextPrice = currentPrice + Mathf.RoundToInt(currentPrice / 100f * 50f);
+        levelHealth++;
+
+        statisticNextUpgrade.PriceUpgradeHP = nextPrice;
+        statisticNextUpgrade.HP = nextHealth;
+        statisticNextUpgrade.levelHP = levelHealth;
+
+        SessionPref.SetStatisticAlly(Type, statisticAlly);
+        SessionPref.SetStatisticNextUpgrade(Type, statisticNextUpgrade);
+
+        LevelManager.Instance.UpgradeStaticsArmy(Type);
         UpdateUIUpgradeHealthBtn(statisticNextUpgrade);
         SessionPref.AddBattleMoney(-currentPrice);
     }
@@ -85,7 +149,24 @@ public class InfoArmyUI : MonoBehaviour
         int currentPrice = statisticNextUpgrade.PriceUpgradeATKSpeed;
 
         if (currentMoney < currentPrice) return;
+        StatisticAlly statisticAlly = SessionPref.GetStatisticAlly(Type);
 
+        float currentATKSpeed = statisticNextUpgrade.ATKSpeed;
+        statisticAlly.ATKSpeed = currentATKSpeed;
+
+        int levelAtkSpeed = statisticNextUpgrade.levelATKSpeed;
+        float nextATKSpeed = currentATKSpeed + currentATKSpeed / 100f * 50f;
+        int nextPrice = currentPrice + Mathf.RoundToInt(currentPrice / 100f * 50f);
+        levelAtkSpeed++;
+
+        statisticNextUpgrade.PriceUpgradeATKSpeed = nextPrice;
+        statisticNextUpgrade.ATKSpeed = nextATKSpeed;
+        statisticNextUpgrade.levelATKSpeed = levelAtkSpeed;
+
+        SessionPref.SetStatisticAlly(Type, statisticAlly);
+        SessionPref.SetStatisticNextUpgrade(Type, statisticNextUpgrade);
+
+        LevelManager.Instance.UpgradeStaticsArmy(Type);
         UpdateUIUpgradeATKSpeedBtn(statisticNextUpgrade);
         SessionPref.AddBattleMoney(-currentPrice);
     }

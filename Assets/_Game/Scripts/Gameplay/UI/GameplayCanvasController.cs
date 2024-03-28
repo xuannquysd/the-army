@@ -21,6 +21,11 @@ public class GameplayCanvasController : MonoBehaviour
 
     public static GameplayCanvasController Instance;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         infoUpgradeList = new();
@@ -55,17 +60,54 @@ public class GameplayCanvasController : MonoBehaviour
 
         int currentStage = SessionPref.GetCurrentStage();
         StageData currentStageData = stageDatas[currentStage];
-        foreach(var type in currentStageData.DefaultAllyType)
+        foreach (var type in currentStageData.DefaultAllyType)
         {
-            StatisticNextUpgrade statisticFirstUpgrade = SOPrefab.allyPrefabContainers.Where(d => d.Type == type).FirstOrDefault().StatisticFirstUpgrade;
+            AllyPrefabContainer allyPrefabContainer = SOPrefab.allyPrefabContainers.Where(d => d.Type == type).FirstOrDefault();
+
+            StatisticAlly statisticAlly = new StatisticAlly
+            {
+                ATKSpeed = GetValueStat(StatisticType.ATK_Speed, allyPrefabContainer.StatisticDefault, SOPrefab.StatisticDefaults),
+                HP = GetValueStat(StatisticType.HP, allyPrefabContainer.StatisticDefault, SOPrefab.StatisticDefaults),
+                Powers = GetValueStat(StatisticType.Damage, allyPrefabContainer.StatisticDefault, SOPrefab.StatisticDefaults),
+            };
+
+            //công thức
+            StatisticNextUpgrade statisticFirstUpgrade = new()
+            {
+                QuantityUnit = 1,
+                ATKSpeed = statisticAlly.ATKSpeed + statisticAlly.ATKSpeed / 100f * 50f,
+                HP = statisticAlly.HP + statisticAlly.HP / 100f * 50f,
+                Powers = statisticAlly.Powers + statisticAlly.Powers / 100f * 50f,
+
+                PriceBuyUnit = allyPrefabContainer.PriceFirstUpgrade.PriceBuyUnit,
+                PriceUpgradeATKSpeed = allyPrefabContainer.PriceFirstUpgrade.PriceUpgradeATKSpeed,
+                PriceUpgradeHP = allyPrefabContainer.PriceFirstUpgrade.PriceUpgradeHealth,
+                PriceUpgradePowers = allyPrefabContainer.PriceFirstUpgrade.PriceUpgradePowers,
+
+                levelATKSpeed = 0,
+                levelHP = 0,
+                levelPowers = 0,
+            };
+
             StatisticBattle statisticBattle = new()
             {
-                statisticAlly = GameplayConstance.DEFAULT_STATISTIC_ALLY,
+                statisticAlly = statisticAlly,
                 statisticNextUpgrade = statisticFirstUpgrade
             };
 
             SessionPref.AddStatisticBattle(type, statisticBattle);
         }
+    }
+
+    float GetValueStat(StatisticType type, StatisticDefault[] statisticAlly, List<StatisticDefault> statisticDefaults)
+    {
+        StatisticDefault statistic = statisticAlly.Where(s => s.Type == type).FirstOrDefault();
+        if (statistic == null)
+        {
+            StatisticDefault statisticDefault = statisticDefaults.Where(s => s.Type == type).FirstOrDefault();
+            return statisticDefault.Value;
+        }
+        else return statistic.Value;
     }
 
     void InitUIUpgradeList()
@@ -79,6 +121,8 @@ public class GameplayCanvasController : MonoBehaviour
             ui.Type = d.Key;
             ui.prefab = allyPrefabContainer.Prefab;
             ui.nameArmy = allyPrefabContainer.Name;
+            ui.statisticAlly = allyPrefabContainer.StatisticDefault;
+            ui.statisticDefaults = SOPrefab.StatisticDefaults;
 
             infoUpgradeList.Add(ui);
         }
@@ -86,7 +130,7 @@ public class GameplayCanvasController : MonoBehaviour
 
     void UpdateFixedColor(Color color)
     {
-        foreach(var ui in infoUpgradeList) ui.UpdateFixedColor(color);
+        foreach (var ui in infoUpgradeList) ui.UpdateFixedColor(color);
     }
 
     void OnChangeBattleMoney(object data)

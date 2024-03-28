@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class CharacterObject : BaseObject
 {
     [SerializeField] private float rawDamage;
-    [SerializeField] private float rawSpeedMove, speedRotate, rawSpeedAttack;
+    [SerializeField] private float rawSpeedMove, rawSpeedRotate, rawSpeedAttack;
     [SerializeField] private float rawRadiusAttack;
     [SerializeField] private Rigidbody2D rigid;
     [SerializeField] private Animator animator;
@@ -13,7 +13,6 @@ public abstract class CharacterObject : BaseObject
     protected BaseObject currentTarget;
     protected List<Transform> allTargetObject;
     protected int totalTarget;
-    protected bool isCombat;
     protected Vector2 dirMove;
 
     #region Statistic React
@@ -22,7 +21,11 @@ public abstract class CharacterObject : BaseObject
     protected float radiusAttack;
     #endregion
 
-    protected Rigidbody2D Rigid { get => rigid; set => rigid = value; }
+    public float RawDamage { get => rawDamage; set => rawDamage = value; }
+    public float RawSpeedMove { get => rawSpeedMove; set => rawSpeedMove = value; }
+    public float RawSpeedRotate { get => rawSpeedRotate; set => rawSpeedRotate = value; }
+    public float RawSpeedAttack { get => rawSpeedAttack; set => rawSpeedAttack = value; }
+    public float RawRadiusAttack { get => rawRadiusAttack; set => rawRadiusAttack = value; }
 
     protected void Start()
     {
@@ -33,10 +36,10 @@ public abstract class CharacterObject : BaseObject
 
     void InitStatisticReact()
     {
-        damage = rawDamage;
-        speedMove = rawSpeedMove;
-        speedAttack = rawSpeedAttack;
-        radiusAttack = rawRadiusAttack;
+        damage = RawDamage;
+        speedMove = RawSpeedMove;
+        speedAttack = RawSpeedAttack;
+        radiusAttack = RawRadiusAttack;
     }
 
     public void InitTargetObject(List<Transform> allTargetObject)
@@ -109,13 +112,13 @@ public abstract class CharacterObject : BaseObject
         if (distance > radiusAttack)
         {
             rigid.velocity = speedMove * Time.deltaTime * dirMove.normalized;
+            animator.speed = speedAttack;
             animator.SetBool("Attacking", false);
         }
         else
         {
             rigid.velocity = Vector2.zero;
             animator.SetBool("Attacking", true);
-            isCombat = true;
         }
     }
 
@@ -123,7 +126,7 @@ public abstract class CharacterObject : BaseObject
     {
         float angle = Mathf.Atan2(dirMove.y, dirMove.x) * Mathf.Rad2Deg - 90f;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * speedRotate);
+        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * RawSpeedRotate);
     }
 
     public void StopAttack()
@@ -135,7 +138,7 @@ public abstract class CharacterObject : BaseObject
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, rawRadiusAttack);
+        Gizmos.DrawWireSphere(transform.position, RawRadiusAttack);
     }
 #endif
 

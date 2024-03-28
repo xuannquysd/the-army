@@ -6,12 +6,15 @@ public struct StatisticNextUpgrade
     public int QuantityUnit;
     public int PriceBuyUnit;
 
+    public int levelPowers;
     public float Powers;
     public int PriceUpgradePowers;
 
+    public int levelHP;
     public float HP;
     public int PriceUpgradeHP;
 
+    public int levelATKSpeed;
     public float ATKSpeed;
     public int PriceUpgradeATKSpeed;
 }

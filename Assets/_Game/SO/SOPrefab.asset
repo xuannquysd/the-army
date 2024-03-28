@@ -12,30 +12,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c450d4bcacf5d4e9cc3ec0d9ce794c, type: 3}
   m_Name: SOPrefab
   m_EditorClassIdentifier: 
-  allyPrefabContainers:
+  StatisticType:
+  - HP
+  - Defend
+  - Damage
+  - Speed Move
+  - Speed Rotate
+  - ATK Speed
+  - Radius Attack
+  StatisticDefaults:
   - Type: 0
-    Name: Warrior
+    Value: 3
+  - Type: 1
+    Value: 0
+  - Type: 2
+    Value: 1
+  - Type: 3
+    Value: 300
+  - Type: 4
+    Value: 5
+  - Type: 5
+    Value: 1
+  - Type: 6
+    Value: 1.25
+  allyPrefabContainers:
+  - Name: Warrior
+    Type: 0
     Icon: {fileID: 0}
     Prefab: {fileID: 1864230190255339058, guid: 6888e5606ecd68344b434925fe7f0198, type: 3}
-    StatisticFirstUpgrade:
-      QuantityUnit: 1
+    StatisticDefault:
+    - Type: 0
+      Value: 10
+    - Type: 3
+      Value: 300
+    PriceFirstUpgrade:
       PriceBuyUnit: 3
-      Powers: 1.1
       PriceUpgradePowers: 5
-      HP: 1.1
-      PriceUpgradeHP: 5
-      ATKSpeed: 1.1
+      PriceUpgradeHealth: 5
       PriceUpgradeATKSpeed: 5
-  - Type: 1
-    Name: Big Warrior
+  - Name: Big Warrior
+    Type: 1
     Icon: {fileID: 0}
     Prefab: {fileID: 1864230190255339058, guid: 8f23f224235d79641b9df767a25c37f2, type: 3}
-    StatisticFirstUpgrade:
-      QuantityUnit: 1
+    StatisticDefault:
+    - Type: 0
+      Value: 5
+    - Type: 3
+      Value: 200
+    PriceFirstUpgrade:
       PriceBuyUnit: 5
-      Powers: 1.1
       PriceUpgradePowers: 7
-      HP: 1.1
-      PriceUpgradeHP: 7
-      ATKSpeed: 1.1
+      PriceUpgradeHealth: 7
       PriceUpgradeATKSpeed: 7
